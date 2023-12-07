@@ -8,10 +8,13 @@ pipeline {
 
             steps {
 
-                sh 'docker rm -f $(docker ps -qa) || true'
+                sh '''
+                ssh -i ~/.ssh/id_rsa jenkins@10.154.0.24 << EOF
 
-                sh 'docker network create new-network || true'
+                docker rm -f $(docker ps -qa) || true
 
+                docker network create new-network || true
+                '''
             }
 
         }
@@ -52,10 +55,15 @@ pipeline {
 
             steps {
 
-                sh 'docker run -d --name flask-app --network new-network beth111/flask-app:latest'
+                sh '''
 
-                sh 'docker run -d -p 80:80 --name mynginx --network new-network beth111/mynginx:latest'
+                ssh -i ~/.ssh/id_rsa jenkins@10.154.0.24 << EOF
 
+                docker run -d --name flask-app --network new-network beth111/flask-app:latest
+
+                docker run -d -p 80:80 --name mynginx --network new-network beth111/mynginx:latest
+
+                '''
             }
 
         }
