@@ -21,9 +21,9 @@ pipeline {
             steps {
 
                 sh '''
-                docker build -t beth111/flask-app .
+                docker build -t beth111/flask-app:latest -t beth111/flask-app:v${BUILD_NUMBER}  .
 
-                docker build -t beth111/mynginx -f Dockerfile.nginx .
+                docker build -t beth111/mynginx:latest -t beth111/mynginx:v${BUILD_NUMBER} -f Dockerfile.nginx .
                 '''
 
             }
@@ -35,9 +35,13 @@ pipeline {
             steps {
 
                 sh '''
-                docker push beth111/flask-app 
+                docker push beth111/flask-app:latest
 
-                docker push beth111/mynginx
+                docker push beth111/flask-app:v${BUILD_NUMBER} 
+
+                docker push beth111/mynginx:latest
+
+                docker push beth111/mynginx:v${BUILD_NUMBER}
                 '''
 
             }
