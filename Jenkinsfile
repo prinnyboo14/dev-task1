@@ -20,9 +20,25 @@ pipeline {
 
             steps {
 
-                sh 'docker build -t flask-app .'
+                sh '''
+                docker build -t beth111/flask-app .
 
-                sh 'docker build -t mynginx -f Dockerfile.nginx .'
+                docker build -t beth111/mynginx -f Dockerfile.nginx .
+                '''
+
+            }
+
+        }
+
+                stage('Push') {
+
+            steps {
+
+                sh '''
+                docker push beth111/flask-app 
+
+                docker push beth111/mynginx
+                '''
 
             }
 
@@ -32,9 +48,9 @@ pipeline {
 
             steps {
 
-                sh 'docker run -d --name flask-app --network new-network flask-app:latest'
+                sh 'docker run -d --name flask-app --network new-network beth111/flask-app:latest'
 
-                sh 'docker run -d -p 80:80 --name mynginx --network new-network mynginx:latest'
+                sh 'docker run -d -p 80:80 --name mynginx --network new-network beth111/mynginx:latest'
 
             }
 
