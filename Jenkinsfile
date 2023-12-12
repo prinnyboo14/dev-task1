@@ -2,11 +2,6 @@ pipeline {
 
     agent any
 
-    environment {
-    FULL_PATH_BRANCH = "${sh(script:'git name-rev --name-only HEAD', returnStdout: true)}"
-    GIT_BRANCH = FULL_PATH_BRANCH.substring(FULL_PATH_BRANCH.lastIndexOf('/') + 1, FULL_PATH_BRANCH.length())
-  }
-
     stages {
 
          stage('Init') {
@@ -14,14 +9,8 @@ pipeline {
             steps {
 
                 sh '''
-                if (env.GIT_BRANCH.contains('main)) {
-                    ssh -i ~/.ssh/id_rsa jenkins@10.154.0.24 << EOF
-                }
-
-                if (env.GIT_BRANCH.contains('dev')) {
-                    ssh -i ~/.ssh/id_rsa jenkins@10.154.0.28 << EOF
-                }
-                
+                ssh -i ~/.ssh/id_rsa jenkins@10.154.0.24 << EOF
+            
                 docker rm -f $(docker ps -qa) || true
 
                 docker network create new-network || true
@@ -67,14 +56,7 @@ pipeline {
             steps {
 
                 sh '''
-
-                if (env.GIT_BRANCH.contains('main)) {
-                    ssh -i ~/.ssh/id_rsa jenkins@10.154.0.24 << EOF
-                }
-
-                if (env.GIT_BRANCH.contains('dev')) {
-                    ssh -i ~/.ssh/id_rsa jenkins@10.154.0.28 << EOF
-                }
+                ssh -i ~/.ssh/id_rsa jenkins@10.154.0.24 << EOF
 
                 docker run -d --name flask-app --network new-network beth111/flask-app:latest
 
