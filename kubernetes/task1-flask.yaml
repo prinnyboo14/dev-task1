@@ -7,9 +7,9 @@ metadata:
 spec:
   containers:
   - name: task1
-  image: beth111/task1kube # dockerhub
-  ports:
-  - containerPort: 5500
+    image: beth111/task1kube # dockerhub
+    ports:
+    - containerPort: 5500
 ---
 apiVersion: v1
 kind: Service
