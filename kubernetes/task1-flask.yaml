@@ -23,5 +23,5 @@ spec:
     app: task1
   ports:
   - protocol: TCP
-  port: 5500
-  targetPort: 5500
+    port: 5500
+    targetPort: 5500
